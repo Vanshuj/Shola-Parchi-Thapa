@@ -1,0 +1,6 @@
+server:
+  forward-headers-strategy: framework
+
+logging:
+  level:
+    com.spt: INFO
