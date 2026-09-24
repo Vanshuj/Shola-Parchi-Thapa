@@ -1,8 +1,10 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { useRoomStore } from '@/store/roomStore';
+import { usePreferenceStore } from '@/store/preferenceStore';
 import Icon from './Icon';
 import ThemeToggle from './ThemeToggle';
+import SangeetPlayerButton from './SangeetPlayerButton';
 const NAV_LINKS = [
     { path: 'home', label: 'Home', to: '/' },
     { path: 'lobby', label: 'Lobby', to: '/lobby' },
@@ -15,6 +17,15 @@ export default function Navbar() {
     const navigate = useNavigate();
     const location = useLocation();
     const room = useRoomStore((s) => s.room);
+    const playerAvatar = usePreferenceStore((s) => s.preferences.playerAvatar ?? 'raja');
+    const avatarIconMap = {
+      raja: 'crown',
+      dadi: 'elderly_woman',
+      chacha: 'face',
+      chhotu: 'bolt',
+      chai: 'emoji_food_beverage',
+    };
+    const currentAvatarIcon = avatarIconMap[playerAvatar] || 'person';
     return (<header className="fixed top-0 left-0 right-0 z-50 w-full bg-surface-container-low/95 dark:bg-surface-container-low/90 dark:border-b dark:border-outline-variant/30 shadow-[0_4px_16px_rgba(46,21,0,0.08)] dark:shadow-[0_4px_24px_rgba(0,0,0,0.5)] backdrop-blur-md transition-colors duration-300">
       <div className="flex h-20 w-full items-center justify-between gap-space-md px-space-md lg:px-margin">
         <div className="flex items-center gap-space-lg">
@@ -57,6 +68,8 @@ export default function Navbar() {
               </span>
             </Link>)}
 
+          <SangeetPlayerButton />
+
           <ThemeToggle />
 
           {isAuthenticated ? (<>
@@ -77,7 +90,7 @@ export default function Navbar() {
                 logout();
                 navigate('/');
             }} className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-on-primary" title="Log out">
-                  <Icon name="person" size={18}/>
+                  <Icon name={currentAvatarIcon} size={18}/>
                 </button>
               </div>
             </>) : (<>

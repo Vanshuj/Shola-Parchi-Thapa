@@ -23,9 +23,9 @@ export default function LeaderboardPage() {
     return (<div className="max-w-6xl mx-auto px-space-md lg:px-margin py-space-xl">
       <div className="rounded-xl bg-secondary-container/20 px-space-md py-space-sm mb-space-lg flex flex-wrap items-center justify-between gap-space-sm">
         <span className="flex items-center gap-1 font-label-sm text-label-sm uppercase tracking-wider text-secondary font-bold">
-          <span className="w-2 h-2 rounded-full bg-secondary-container animate-pulse"/> Season 4: Holiday Verandah Edition
+          <span className="w-2 h-2 rounded-full bg-secondary-container animate-pulse"/> Live Baithak Standings
         </span>
-        <span className="font-body-sm text-body-sm text-on-surface-variant">Ledger Register #S4-2024</span>
+        <span className="font-body-sm text-body-sm text-on-surface-variant">Realtime Player Rankings</span>
       </div>
 
       <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-space-md mb-space-lg">
@@ -88,7 +88,7 @@ export default function LeaderboardPage() {
       <div className="rounded-xl bg-surface-container-lowest shadow-sm overflow-hidden">
         <div className="px-space-lg py-space-md flex items-center justify-between border-b border-outline-variant">
           <h2 className="font-title-lg text-title-lg text-on-surface">Universal Standings</h2>
-          <span className="font-label-sm text-label-sm uppercase tracking-wider text-secondary font-bold">Season 4</span>
+          <span className="font-label-sm text-label-sm uppercase tracking-wider text-secondary font-bold">All Players</span>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full text-left">

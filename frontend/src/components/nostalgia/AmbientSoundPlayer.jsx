@@ -1,20 +1,45 @@
-import { useEffect, useRef } from 'react';
-import { Howl } from 'howler';
+import { useEffect } from 'react';
 import { useNostalgia } from '@/hooks/useNostalgia';
-import { SOUND_URLS } from '@/utils/soundManager';
+import { soundEffects } from '@/utils/soundManager';
+
 export default function AmbientSoundPlayer() {
-    const { ambientSounds } = useNostalgia();
-    const howlRef = useRef(null);
-    useEffect(() => {
-        if (ambientSounds) {
-            const howl = new Howl({ src: [SOUND_URLS.ambientRadio], loop: true, volume: 0.15 });
-            howl.play();
-            howlRef.current = howl;
+  const { ambientSounds, ambientTrack, ambientVolume, muteOnTabBlur } = useNostalgia();
+
+  useEffect(() => {
+    if (ambientSounds) {
+      soundEffects.startMusic(ambientTrack, ambientVolume / 100);
+    } else {
+      soundEffects.stopMusic();
+    }
+  }, [ambientSounds, ambientTrack, ambientVolume]);
+
+  // Tab visibility change handler
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (!muteOnTabBlur) return;
+      if (document.visibilityState === 'hidden') {
+        if (soundEffects.isPlayingMusic()) {
+          soundEffects.setMusicVolume(0.001);
         }
-        return () => {
-            howlRef.current?.stop();
-            howlRef.current = null;
-        };
-    }, [ambientSounds]);
-    return null;
+      } else {
+        if (ambientSounds) {
+          soundEffects.setMusicVolume(ambientVolume / 100);
+        }
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
+  }, [ambientSounds, ambientVolume, muteOnTabBlur]);
+
+  useEffect(() => {
+    return () => {
+      soundEffects.stopMusic();
+    };
+  }, []);
+
+  return null;
 }
+

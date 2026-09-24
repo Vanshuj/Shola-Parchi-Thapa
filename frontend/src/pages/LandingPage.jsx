@@ -1,5 +1,10 @@
-import { Link } from 'react-router-dom';
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import Icon from '@/components/common/Icon';
+import { useAuthStore } from '@/store/authStore';
+import { useRoomStore } from '@/store/roomStore';
+import { roomApi } from '@/api/roomApi';
+import { authApi } from '@/api/authApi';
 const STEPS = [
     {
         n: 1,
@@ -35,6 +40,67 @@ const STEPS = [
     },
 ];
 export default function LandingPage() {
+    const navigate = useNavigate();
+    const token = useAuthStore((s) => s.token);
+    const [botLoading, setBotLoading] = useState(false);
+    const [botError, setBotError] = useState(null);
+    const [joiningPasscode, setJoiningPasscode] = useState(false);
+    const [passcode, setPasscode] = useState('');
+    const [passcodeError, setPasscodeError] = useState(null);
+
+    async function handleStartBotMatch() {
+        setBotLoading(true);
+        setBotError(null);
+        try {
+            let currentToken = useAuthStore.getState().token;
+            if (!currentToken) {
+                const rand = Math.floor(1000 + Math.random() * 9000);
+                const guestName = `Khiladi_${rand}`;
+                const guestEmail = `khiladi_${Date.now()}_${rand}@spt.local`;
+                const guestPassword = `Guest#${rand}!`;
+                const authData = await authApi.register(guestName, guestEmail, guestPassword);
+                useAuthStore.getState().setAuth(authData.id, authData.username, authData.token);
+                currentToken = authData.token;
+            }
+
+            const newRoom = await roomApi.create(4, true);
+            useRoomStore.getState().setRoom(newRoom);
+
+            const startRes = await roomApi.start(newRoom.roomCode);
+            const gameId = startRes.gameId || newRoom.gameId;
+            navigate(`/game/${gameId}`);
+        } catch (err) {
+            console.error('Failed to start bot match:', err);
+            setBotError(err?.response?.data?.message || err?.message || 'Could not start bot match. Please try again.');
+        } finally {
+            setBotLoading(false);
+        }
+    }
+
+    async function handlePasscodeSubmit(e) {
+        if (e) e.preventDefault();
+        const code = passcode.trim().toUpperCase();
+        if (!code) return;
+        setPasscodeError(null);
+        setJoiningPasscode(true);
+        try {
+            let currentToken = useAuthStore.getState().token;
+            if (!currentToken) {
+                const rand = Math.floor(1000 + Math.random() * 9000);
+                const authData = await authApi.register(`Khiladi_${rand}`, `khiladi_${Date.now()}_${rand}@spt.local`, `Guest#${rand}!`);
+                useAuthStore.getState().setAuth(authData.id, authData.username, authData.token);
+            }
+            const joinedRoom = await roomApi.join(code);
+            useRoomStore.getState().setRoom(joinedRoom);
+            navigate(`/lobby/${code}`);
+        } catch (err) {
+            console.error('Could not join room:', err);
+            setPasscodeError(err?.response?.data?.message || 'Could not join room. Check the code and try again.');
+        } finally {
+            setJoiningPasscode(false);
+        }
+    }
+
     return (<div className="flex flex-col w-full">
       {/* Hero */}
       <section className="relative w-full pt-16 pb-16 lg:pb-24 px-space-md lg:px-margin overflow-hidden bg-gradient-to-b from-surface-container-high/30 via-surface-container/15 to-transparent dark:from-surface-container-high/15 dark:via-surface-container/5 dark:to-transparent transition-colors duration-300">
@@ -59,36 +125,74 @@ export default function LandingPage() {
             </p>
 
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-space-sm w-full sm:w-auto mb-space-lg">
-              <Link to="/signup" className="group relative px-space-lg py-space-md rounded-lg bg-primary text-on-primary font-label-lg text-label-lg font-bold shadow-md hover:shadow-xl hover:bg-primary-container active:translate-y-0.5 transition-all flex items-center justify-center gap-space-xs">
-                <Icon name="sports_esports" size={20} className="transition-transform group-hover:scale-125"/>
-                <span>Play Now (Instant Match)</span>
-              </Link>
-              <Link to="/signup" className="px-space-lg py-space-md rounded-lg bg-secondary-container text-on-secondary-container font-label-lg text-label-lg font-bold shadow-sm hover:shadow-md active:translate-y-0.5 transition-all flex items-center justify-center gap-space-xs">
+              <button
+                type="button"
+                id="play-bots-btn"
+                onClick={handleStartBotMatch}
+                disabled={botLoading}
+                className="group relative px-space-lg py-space-md rounded-lg bg-primary text-on-primary font-label-lg text-label-lg font-bold shadow-md hover:shadow-xl hover:bg-primary-container active:translate-y-0.5 transition-all flex items-center justify-center gap-space-xs disabled:opacity-50"
+                title="Start instant 4-player game with AI bots"
+              >
+                {botLoading ? (
+                  <>
+                    <span className="w-4 h-4 border-2 border-on-primary border-t-transparent rounded-full animate-spin" />
+                    <span>Starting Bots...</span>
+                  </>
+                ) : (
+                  <>
+                    <Icon name="smart_toy" size={20} className="transition-transform group-hover:scale-125"/>
+                    <span>Play with Bots</span>
+                    <span className="ml-1 text-[10px] tracking-wider uppercase px-1.5 py-0.5 rounded bg-surface-container-lowest/20 text-on-primary font-extrabold">Instant</span>
+                  </>
+                )}
+              </button>
+
+              <Link
+                to={token ? "/lobby" : "/signup"}
+                className="px-space-lg py-space-md rounded-lg bg-secondary-container text-on-secondary-container font-label-lg text-label-lg font-bold shadow-sm hover:shadow-md active:translate-y-0.5 transition-all flex items-center justify-center gap-space-xs"
+              >
                 <Icon name="chair" size={20}/>
                 <span>Create Private Baithak</span>
               </Link>
             </div>
+            {botError && (
+              <div className="mb-space-md p-space-sm rounded-lg bg-error/10 border border-error/30 text-error text-body-sm flex items-center gap-space-xs max-w-md">
+                <Icon name="error" size={18} />
+                <span>{botError}</span>
+              </div>
+            )}
 
-            <div className="w-full sm:max-w-md p-space-sm rounded-xl bg-surface-container-low shadow-sm flex items-center gap-space-sm">
+            <form onSubmit={handlePasscodeSubmit} className="w-full sm:max-w-md p-space-sm rounded-xl bg-surface-container-low shadow-sm flex items-center gap-space-sm">
               <div className="flex items-center gap-space-xs pl-space-xs text-on-surface-variant font-label-sm text-label-sm uppercase">
                 <Icon name="key" size={18} className="text-secondary"/>
                 <span>Passcode:</span>
               </div>
-              <input maxLength={8} placeholder="THAP-9812" className="flex-1 bg-surface-container-lowest px-space-sm py-1.5 rounded font-label-md text-label-md text-on-surface uppercase tracking-widest outline-none text-center placeholder:text-outline-variant"/>
-              <Link to="/login" className="px-space-md py-1.5 rounded-lg bg-surface-container-highest hover:bg-secondary-fixed text-on-secondary-container font-label-sm text-label-sm uppercase font-bold transition-colors">
-                Enter
-              </Link>
-            </div>
-
-            <div className="mt-space-md flex items-center gap-space-sm text-on-surface-variant font-body-sm text-body-sm">
-              <span className="relative flex h-2.5 w-2.5">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary-container opacity-75"/>
-                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-secondary"/>
-              </span>
-              <span>
-                <strong>1,842 players</strong> passing chits right now in Delhi, Kolkata, Mumbai &amp; London
-              </span>
-            </div>
+              <input
+                maxLength={8}
+                value={passcode}
+                onChange={(e) => setPasscode(e.target.value.toUpperCase())}
+                placeholder="THAP-9812"
+                disabled={joiningPasscode}
+                className="flex-1 bg-surface-container-lowest px-space-sm py-1.5 rounded font-label-md text-label-md text-on-surface uppercase tracking-widest outline-none text-center placeholder:text-outline-variant disabled:opacity-50"
+              />
+              <button
+                type="submit"
+                disabled={joiningPasscode || !passcode.trim()}
+                className="px-space-md py-1.5 rounded-lg bg-surface-container-highest hover:bg-secondary-fixed text-on-secondary-container font-label-sm text-label-sm uppercase font-bold transition-colors disabled:opacity-50 flex items-center gap-1"
+              >
+                {joiningPasscode ? (
+                  <>
+                    <span className="w-3.5 h-3.5 border-2 border-secondary border-t-transparent rounded-full animate-spin" />
+                    <span>Joining...</span>
+                  </>
+                ) : (
+                  <span>Enter</span>
+                )}
+              </button>
+            </form>
+            {passcodeError && (
+              <p className="text-xs text-error mt-1">{passcodeError}</p>
+            )}
           </div>
 
           {/* Hero visual: Baithak table */}
@@ -302,17 +406,30 @@ export default function LandingPage() {
             Ready to Slap the Floor?
           </h2>
           <p className="font-body-lg text-body-lg text-on-surface-variant mb-space-lg">
-            No downloads, no registration required. Spin up a room in 3 seconds, share the 4-digit code on
-            WhatsApp, and feel the adrenaline rush of Solah Parchi.
+            Create a room or play with bots, share your room code with friends, and experience the nostalgic excitement of Solah Parchi.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-space-sm">
-            <Link to="/signup" className="px-space-lg py-space-md rounded-lg bg-primary text-on-primary font-label-lg text-label-lg font-bold shadow-md hover:shadow-xl flex items-center justify-center gap-space-xs w-full sm:w-auto">
-              <Icon name="bolt" size={20}/>
-              Start Instant 4-Player Match
-            </Link>
+            <button
+              type="button"
+              onClick={handleStartBotMatch}
+              disabled={botLoading}
+              className="px-space-lg py-space-md rounded-lg bg-primary text-on-primary font-label-lg text-label-lg font-bold shadow-md hover:shadow-xl hover:bg-primary-container active:translate-y-0.5 transition-all flex items-center justify-center gap-space-xs w-full sm:w-auto disabled:opacity-50"
+            >
+              {botLoading ? (
+                <>
+                  <span className="w-4 h-4 border-2 border-on-primary border-t-transparent rounded-full animate-spin" />
+                  <span>Loading Bots...</span>
+                </>
+              ) : (
+                <>
+                  <Icon name="smart_toy" size={20}/>
+                  <span>Play with Bots</span>
+                </>
+              )}
+            </button>
             <Link to="/rules" className="px-space-lg py-space-md rounded-lg bg-surface-container-lowest text-on-surface font-label-lg text-label-lg font-bold shadow-sm hover:shadow-md flex items-center justify-center gap-space-xs w-full sm:w-auto border border-outline-variant">
               <Icon name="menu_book" size={20}/>
-              Read Comprehensive Rules
+              <span>Read Comprehensive Rules</span>
             </Link>
           </div>
           <div className="mt-space-lg flex flex-wrap items-center justify-center gap-space-md font-body-sm text-body-sm text-on-surface-variant">
@@ -320,7 +437,7 @@ export default function LandingPage() {
               <Icon name="check_circle" size={16} className="text-secondary"/> 100% Free to Play
             </span>
             <span className="flex items-center gap-1">
-              <Icon name="check_circle" size={16} className="text-secondary"/> WebRTC Encrypted
+              <Icon name="check_circle" size={16} className="text-secondary"/> Realtime Multiplayer
             </span>
             <span className="flex items-center gap-1">
               <Icon name="check_circle" size={16} className="text-secondary"/> Works on Mobile &amp; Tablet

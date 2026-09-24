@@ -19,7 +19,7 @@ services:
         condition: service_healthy
     environment:
       SPRING_PROFILES_ACTIVE: prod
-      MONGO_URI: mongodb://mongodb:27017/solah_parchi_thap
+      MONGO_URI: ${MONGO_URI:-mongodb+srv://vanshikacvjain_db_user:MGG6fsM7TlPTFmgj@sholachit.l9wmcbk.mongodb.net/solah_parchi_thap?retryWrites=true&w=majority}
       JWT_SECRET: ${JWT_SECRET:-change-this-in-production-min-32-characters}
       CORS_ORIGIN: ${CORS_ORIGIN:-http://localhost:3000}
     ports:

@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form';
 import { useAuth } from '@/hooks/useAuth';
 import { useRoomStore } from '@/store/roomStore';
 import { useLabelStore } from '@/store/labelStore';
+import { usePreferenceStore } from '@/store/preferenceStore';
 import { roomApi } from '@/api/roomApi';
 import axiosClient from '@/api/axiosClient';
 import GameLobby from '@/components/game/GameLobby';
@@ -17,12 +18,13 @@ export default function LobbyPage() {
     const { userId, username } = useAuth();
     const { room, setRoom, clear: clearRoom } = useRoomStore();
     const { labels, fetch: fetchLabels } = useLabelStore();
+    const defaultPrivacy = usePreferenceStore((s) => s.preferences.defaultRoomPrivacy ?? 'private');
     const [userProfile, setUserProfile] = useState(null);
     const [loadingRoom, setLoadingRoom] = useState(false);
     const [roomError, setRoomError] = useState(null);
     const [joinError, setJoinError] = useState(null);
     const [creating, setCreating] = useState(false);
-    const [isPrivate, setIsPrivate] = useState(true);
+    const [isPrivate, setIsPrivate] = useState(defaultPrivacy === 'private');
     const { register, handleSubmit, reset: resetJoinForm } = useForm();
     // Load user profile and custom parchis
     useEffect(() => {
@@ -57,7 +59,10 @@ export default function LobbyPage() {
     useEffect(() => {
         if (code) {
             setLoadingRoom(true);
-            refreshRoom();
+            // Ensure the visiting player is seated in the room
+            roomApi.join(code).catch(() => {}).finally(() => {
+                refreshRoom();
+            });
             const interval = setInterval(refreshRoom, 2000);
             return () => clearInterval(interval);
         }

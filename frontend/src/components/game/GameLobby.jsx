@@ -72,13 +72,39 @@ export default function GameLobby({ room, isHost, onStart, onLeave }) {
           <button type="button" onClick={onLeave} className="px-space-lg py-space-sm rounded-lg bg-surface-container text-on-surface-variant font-label-lg text-label-lg font-bold hover:bg-surface-container-high transition-colors">
             Leave Baithak
           </button>
-          {isHost ? (<button type="button" onClick={onStart} disabled={!canStart} className="px-space-xl py-space-md rounded-lg bg-primary text-on-primary font-label-lg text-label-lg font-bold shadow-md hover:shadow-xl disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-space-xs">
-              <Icon name="front_hand" size={20}/> Start Baithak
-            </button>) : (<span className="font-body-md text-body-md text-on-surface-variant">Waiting for host to start&hellip;</span>)}
+          {isHost ? (
+            <div className="flex flex-wrap items-center gap-space-sm">
+              {room.seatedUsernames.length < room.maxPlayers && (
+                <button
+                  type="button"
+                  onClick={onStart}
+                  className="px-space-lg py-space-md rounded-lg bg-secondary-container text-on-secondary-container font-label-lg text-label-lg font-bold shadow-sm hover:shadow-md hover:brightness-105 active:translate-y-0.5 transition-all flex items-center gap-space-xs"
+                  title="Start now and fill all remaining seats with AI bots"
+                >
+                  <Icon name="smart_toy" size={20} />
+                  <span>Fill with Bots &amp; Start</span>
+                </button>
+              )}
+              {canStart && (
+                <button
+                  type="button"
+                  onClick={onStart}
+                  className="px-space-xl py-space-md rounded-lg bg-primary text-on-primary font-label-lg text-label-lg font-bold shadow-md hover:shadow-xl active:translate-y-0.5 transition-all flex items-center gap-space-xs"
+                >
+                  <Icon name="front_hand" size={20} />
+                  <span>Start Baithak</span>
+                </button>
+              )}
+            </div>
+          ) : (
+            <span className="font-body-md text-body-md text-on-surface-variant">Waiting for host to start&hellip;</span>
+          )}
         </div>
-        {isHost && !canStart && (<p className="mt-space-sm text-center font-body-sm text-body-sm text-on-surface-variant">
-            Need at least 2 players seated to start.
-          </p>)}
+        {isHost && !canStart && (
+          <p className="mt-space-sm text-center font-body-sm text-body-sm text-on-surface-variant">
+            Waiting for human players, or tap <strong>&ldquo;Fill with Bots &amp; Start&rdquo;</strong> to jump into the action immediately!
+          </p>
+        )}
       </div>
     </div>);
 }

@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import { useThemeStore } from '@/store/themeStore';
 import { useNostalgia } from '@/hooks/useNostalgia';
+import { usePreferenceStore } from '@/store/preferenceStore';
 /**
  * High-res canvas texture for an authentic handwritten/stamped Solah Parchi chit.
  */
@@ -150,7 +151,10 @@ export default function Baithak3DCanvas() {
     const canvasRef = useRef(null);
     const theme = useThemeStore((s) => s.theme);
     const { reduceMotion } = useNostalgia();
+    const graphicsMode = usePreferenceStore((s) => s.preferences.graphicsMode ?? '3D');
+
     useEffect(() => {
+        if (graphicsMode === '2D') return;
         const canvas = canvasRef.current;
         if (!canvas)
             return;
@@ -476,6 +480,9 @@ export default function Baithak3DCanvas() {
             armillaryRingMat.dispose();
             renderer.dispose();
         };
-    }, [theme, reduceMotion]);
+    }, [theme, reduceMotion, graphicsMode]);
+
+    if (graphicsMode === '2D') return null;
+
     return (<canvas ref={canvasRef} aria-hidden="true" className="pointer-events-none fixed inset-0 z-0 h-full w-full opacity-100 transition-opacity duration-700"/>);
 }
