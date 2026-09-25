@@ -11,6 +11,7 @@ const NAV_LINKS = [
     { path: 'customize-parchis', label: 'Customize Parchis', to: '/customize' },
     { path: 'leaderboard', label: 'Leaderboard', to: '/leaderboard' },
     { path: 'rules', label: 'Rules', to: '/rules' },
+    { path: 'feedback', label: 'Feedback', to: '/feedback' },
 ];
 export default function Navbar() {
     const { isAuthenticated, username, logout } = useAuth();

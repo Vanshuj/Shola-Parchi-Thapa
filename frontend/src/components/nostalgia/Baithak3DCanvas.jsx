@@ -257,8 +257,8 @@ export default function Baithak3DCanvas() {
         scene.add(parchiGroup);
         const chitsData = [
             {
-                title: '\u0930\u093e\u091c\u093e', // Raja
-                eng: 'Raja',
+                title: 'RAJA',
+                eng: 'King',
                 pts: '1000',
                 color: '#b91c1c', // Kumkum Crimson
                 backColor: 0xfff3e5,
@@ -266,8 +266,8 @@ export default function Baithak3DCanvas() {
                 restingRot: { x: 0.12, y: 0.25, z: -0.08 },
             },
             {
-                title: '\u0930\u093e\u0928\u0940', // Rani
-                eng: 'Rani',
+                title: 'RANI',
+                eng: 'Queen',
                 pts: '800',
                 color: '#d97706', // Haldi Gold
                 backColor: 0xfef9e7,
@@ -275,8 +275,8 @@ export default function Baithak3DCanvas() {
                 restingRot: { x: -0.15, y: -0.22, z: 0.1 },
             },
             {
-                title: '\u0938\u093f\u092a\u093e\u0939\u0940', // Sipahi
-                eng: 'Sipahi',
+                title: 'SIPAHI',
+                eng: 'Soldier',
                 pts: '500',
                 color: '#1d4ed8', // Royal Indigo
                 backColor: 0xf0f4ff,
@@ -284,8 +284,8 @@ export default function Baithak3DCanvas() {
                 restingRot: { x: 0.18, y: -0.2, z: 0.08 },
             },
             {
-                title: '\u091a\u094b\u0930', // Chor
-                eng: 'Chor',
+                title: 'CHOR',
+                eng: 'Thief',
                 pts: '0',
                 color: '#9a3412', // Chai Terracotta
                 backColor: 0xfbf4eb,
@@ -294,8 +294,8 @@ export default function Baithak3DCanvas() {
             },
             {
                 // 5TH CHIT: Centered directly inside the 3D Sphere Circle!
-                title: '\u0925\u093e\u092a!', // Thap!
-                eng: 'THAP!',
+                title: 'THAP!',
+                eng: 'Slap',
                 pts: '16',
                 color: '#dc2626', // Vermillion Red
                 backColor: 0xffebee,

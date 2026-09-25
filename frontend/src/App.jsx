@@ -15,6 +15,7 @@ import ResultsPage from '@/pages/ResultsPage';
 import LeaderboardPage from '@/pages/LeaderboardPage';
 import SettingsPage from '@/pages/SettingsPage';
 import RulesPage from '@/pages/RulesPage';
+import FeedbackPage from '@/pages/FeedbackPage';
 import NotFoundPage from '@/pages/NotFoundPage';
 import Baithak3DCanvas from '@/components/nostalgia/Baithak3DCanvas';
 export default function App() {
@@ -50,6 +51,7 @@ export default function App() {
                 </ProtectedRoute>}/>
             <Route path="/leaderboard" element={<LeaderboardPage />}/>
             <Route path="/rules" element={<RulesPage />}/>
+            <Route path="/feedback" element={<FeedbackPage />}/>
             <Route path="/settings" element={<ProtectedRoute>
                   <SettingsPage />
                 </ProtectedRoute>}/>

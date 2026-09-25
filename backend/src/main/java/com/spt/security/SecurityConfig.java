@@ -68,7 +68,7 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
             .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
-                    .requestMatchers("/api/v1/auth/**", "/ws/**").permitAll()
+                    .requestMatchers("/api/v1/auth/**", "/ws/**", "/api/v1/feedback/**").permitAll()
                     .requestMatchers("/actuator/health").permitAll()
                     .anyRequest().authenticated())
             .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
