@@ -23,7 +23,7 @@ public class CorsConfig {
                         .filter(s -> !s.isEmpty())
                         .toArray(String[]::new);
                 registry.addMapping("/actuator/**")
-                        .allowedOrigins(origins)
+                        .allowedOriginPatterns(origins)
                         .allowedMethods("GET");
             }
         };

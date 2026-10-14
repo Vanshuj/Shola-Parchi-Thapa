@@ -18,7 +18,7 @@ app:
     secret: ${JWT_SECRET:change-this-dev-secret-min-32-characters-long}
     expiration-ms: 86400000
   cors:
-    origin: ${CORS_ORIGIN:http://localhost:8000,http://localhost:5173}
+    origin: ${CORS_ORIGIN:http://localhost:8000,http://localhost:5173,https://shola-parchi-thapa.vercel.app,https://*.vercel.app}
 
 management:
   endpoints:
