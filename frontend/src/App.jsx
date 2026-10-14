@@ -16,14 +16,19 @@ import LeaderboardPage from '@/pages/LeaderboardPage';
 import SettingsPage from '@/pages/SettingsPage';
 import RulesPage from '@/pages/RulesPage';
 import FeedbackPage from '@/pages/FeedbackPage';
+import PrivacyPolicyPage from '@/pages/PrivacyPolicyPage';
+import TermsPage from '@/pages/TermsPage';
+import CookiePolicyPage from '@/pages/CookiePolicyPage';
 import NotFoundPage from '@/pages/NotFoundPage';
 import Baithak3DCanvas from '@/components/nostalgia/Baithak3DCanvas';
+import CookieConsentBanner from '@/components/common/CookieConsentBanner';
 export default function App() {
     return (<div className="relative flex min-h-screen flex-col bg-surface text-on-surface transition-colors duration-300">
       <Baithak3DCanvas />
       <PaperTexture />
       <PencilCursor />
       <AmbientSoundPlayer />
+      <CookieConsentBanner />
       <div className="relative z-10 flex min-h-screen flex-col">
         <Navbar />
         <main className="flex-1 pt-20">
@@ -52,6 +57,9 @@ export default function App() {
             <Route path="/leaderboard" element={<LeaderboardPage />}/>
             <Route path="/rules" element={<RulesPage />}/>
             <Route path="/feedback" element={<FeedbackPage />}/>
+            <Route path="/privacy" element={<PrivacyPolicyPage />}/>
+            <Route path="/cookies" element={<CookiePolicyPage />}/>
+            <Route path="/terms" element={<TermsPage />}/>
             <Route path="/settings" element={<ProtectedRoute>
                   <SettingsPage />
                 </ProtectedRoute>}/>

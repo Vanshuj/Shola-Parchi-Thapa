@@ -53,11 +53,11 @@ export default function RulesPage() {
               Heritage Rulebook
             </span>
             <span className="px-space-sm py-0.5 rounded-full bg-primary/10 font-label-sm text-label-sm text-primary font-bold">
-              Certified Rules
+              Standard Community Rules
             </span>
           </span>
-          <h1 className="font-headline-lg text-headline-lg-mobile lg:text-headline-lg text-on-surface mb-space-xs">
-            Official Baithak Rulebook &amp; Heritage Lore
+          <h1 className="font-headline-lg text-headline-lg-mobile lg:text-headline-lg text-on-surface mb-space-xs font-bold">
+            Traditional Baithak Rulebook &amp; Heritage Lore
           </h1>
           <p className="font-body-md text-body-md text-on-surface-variant max-w-xl">
             The sacred rules of 16 chits &amp; the reflex slap. Played on woven floor mats during long monsoon

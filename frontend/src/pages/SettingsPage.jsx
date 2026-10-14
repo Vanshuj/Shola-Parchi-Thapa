@@ -91,6 +91,44 @@ export default function SettingsPage() {
     navigate('/');
   }
 
+  function handleOpenCookieSettings() {
+    window.dispatchEvent(new CustomEvent('open-cookie-preferences'));
+  }
+
+  function handleDownloadData() {
+    try {
+      const data = {
+        username: username || 'Guest',
+        preferences,
+        theme,
+        exportedAt: new Date().toISOString(),
+        compliance: 'Data Principal Export under Section 11 of India DPDP Act 2023',
+      };
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `spt_data_${username || 'khiladi'}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+      showToast('📥 Account data downloaded successfully (Section 11, DPDP Act)');
+    } catch {
+      showToast('Could not download data.');
+    }
+  }
+
+  function handleEraseData() {
+    if (window.confirm('Are you sure you want to erase all your local data, saved custom cards, and sign out? This action is permanent under Section 12 of the DPDP Act.')) {
+      try {
+        localStorage.clear();
+        logout();
+        navigate('/');
+      } catch {
+        navigate('/');
+      }
+    }
+  }
+
   return (
     <div className="max-w-5xl mx-auto px-space-md lg:px-margin py-space-xl">
       {/* Toast Feedback Alert */}
@@ -979,6 +1017,48 @@ export default function SettingsPage() {
               <div className="mt-space-md flex items-center gap-space-sm">
                 <Button variant="danger" size="sm" onClick={handleLogout} className="w-full sm:w-auto justify-center">
                   Sign Out of Baithak
+                </Button>
+              </div>
+            </div>
+
+            {/* Cookie & Storage Controls (DPDP Act) */}
+            <div className="p-space-md rounded-xl bg-surface-container-lowest border border-outline-variant/40 flex flex-col justify-between">
+              <div>
+                <span className="font-label-md text-label-md font-bold text-on-surface flex items-center gap-1.5">
+                  <Icon name="cookie" size={18} className="text-secondary" />
+                  <span>Cookie &amp; Storage Preferences</span>
+                </span>
+                <p className="font-body-sm text-body-sm text-on-surface-variant mt-1">
+                  Reconfigure or revoke your cookie choices anytime under India&rsquo;s DPDP Act 2023.
+                </p>
+              </div>
+              <div className="mt-space-md flex items-center gap-2">
+                <Button variant="ghost" size="sm" onClick={handleOpenCookieSettings} className="w-full sm:w-auto justify-center">
+                  Adjust Preferences
+                </Button>
+                <Link to="/cookies" className="text-xs text-primary font-bold hover:underline">
+                  Policy
+                </Link>
+              </div>
+            </div>
+
+            {/* Data Principal Rights (Export & Erasure) */}
+            <div className="p-space-md rounded-xl bg-surface-container-lowest border border-outline-variant/40 flex flex-col justify-between">
+              <div>
+                <span className="font-label-md text-label-md font-bold text-on-surface flex items-center gap-1.5">
+                  <Icon name="shield" size={18} className="text-primary" />
+                  <span>Data Principal Rights (DPDP Act 2023)</span>
+                </span>
+                <p className="font-body-sm text-body-sm text-on-surface-variant mt-1">
+                  Exercise Section 11 (Access/Download data) and Section 12 (Correction/Complete Erasure).
+                </p>
+              </div>
+              <div className="mt-space-md flex flex-wrap items-center gap-2">
+                <Button variant="ghost" size="sm" onClick={handleDownloadData} className="w-full sm:w-auto justify-center">
+                  Download My Data
+                </Button>
+                <Button variant="danger" size="sm" onClick={handleEraseData} className="w-full sm:w-auto justify-center">
+                  Erase All Data
                 </Button>
               </div>
             </div>

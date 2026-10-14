@@ -84,7 +84,7 @@ export default function GameTablePage() {
   if (!state) return <Loader label="Dealing the parchis…" />;
 
   const isFinished = state.status === 'FINISHED';
-  const winnerOpponent = state.opponents.find((o) => o.id === state.winnerId);
+  const winnerOpponent = (state.opponents || []).find((o) => o.id === state.winnerId);
   const winnerUsername =
     state.winnerId === userId ? 'You' : winnerOpponent?.username ?? 'A player';
 

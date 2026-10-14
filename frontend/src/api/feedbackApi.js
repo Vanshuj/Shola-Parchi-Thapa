@@ -55,68 +55,45 @@ export const feedbackApi = {
       const response = await axiosClient.get('/feedback/stats');
       return response.data;
     } catch {
-      // Local fallback stats
+      // Authentic local fallback: aggregate only verified local submissions if any exist
       const local = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY) || '[]');
-      const count = Math.max(18, local.length + 18);
+      const count = local.length;
+      const avg = count > 0
+        ? Math.round((local.reduce((sum, item) => sum + (Number(item.rating) || 5), 0) / count) * 10) / 10
+        : 5.0;
+
+      const categoryCounts = {};
+      local.forEach((item) => {
+        const cat = item.category || 'GENERAL';
+        categoryCounts[cat] = (categoryCounts[cat] || 0) + 1;
+      });
+
       return {
         totalFeedback: count,
-        averageRating: 4.9,
-        categoryCounts: {
-          GAMEPLAY: 7,
-          AUDIO_MUSIC: 5,
-          VISUALS_3D: 3,
-          SUGGESTION: 2,
-          GENERAL: 1,
-        },
+        averageRating: avg,
+        categoryCounts,
       };
     }
   },
 
   /**
    * Fetch recent feedback submissions.
+   * Only returns authentic feedback from the backend or the user's own local submissions.
+   * No fabricated or fake testimonials are permitted.
    */
   async getRecent() {
     try {
       const response = await axiosClient.get('/feedback/recent');
-      if (response.data && response.data.length > 0) {
+      if (response.data && Array.isArray(response.data) && response.data.length > 0) {
         return response.data;
       }
     } catch {
-      // ignore
+      // ignore network errors
     }
-    
-    // Return curated authentic community testimonials & local items
+
+    // Return only actual verified submissions from local history
     const local = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY) || '[]');
-    const presets = [
-      {
-        id: 'seed-1',
-        username: 'Kabir V.',
-        category: 'AUDIO_MUSIC',
-        rating: 5,
-        subject: 'Raag Yaman Bansuri is pure nostalgia',
-        message: 'The courtyard monsoon rain and tanpura while passing parchis feels like real childhood baithak in Jaipur!',
-        createdAt: new Date(Date.now() - 3600000 * 4).toISOString(),
-      },
-      {
-        id: 'seed-2',
-        username: 'Ananya Sharma',
-        category: 'GAMEPLAY',
-        rating: 5,
-        subject: 'THAP card slam feels so visceral',
-        message: 'The table slap audio vibration and smooth animations make winning feel just like slamming the hand on a real wooden chauki.',
-        createdAt: new Date(Date.now() - 3600000 * 18).toISOString(),
-      },
-      {
-        id: 'seed-3',
-        username: 'Rohan Mehra',
-        category: 'VISUALS_3D',
-        rating: 5,
-        subject: 'Khadi texture & 3D Verandah',
-        message: 'The nostalgic aesthetic with charcoal pencil borders and brass diya lighting is magnificent.',
-        createdAt: new Date(Date.now() - 3600000 * 42).toISOString(),
-      },
-    ];
-    return [...local, ...presets].slice(0, 10);
+    return local.slice(0, 10);
   },
 
   /**

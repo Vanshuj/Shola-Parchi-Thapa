@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { useRoomStore } from '@/store/roomStore';
@@ -11,9 +12,9 @@ const NAV_LINKS = [
     { path: 'customize-parchis', label: 'Customize Parchis', to: '/customize' },
     { path: 'leaderboard', label: 'Leaderboard', to: '/leaderboard' },
     { path: 'rules', label: 'Rules', to: '/rules' },
-    { path: 'feedback', label: 'Feedback', to: '/feedback' },
 ];
 export default function Navbar() {
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const { isAuthenticated, username, logout } = useAuth();
     const navigate = useNavigate();
     const location = useLocation();
@@ -30,10 +31,13 @@ export default function Navbar() {
     return (<header className="fixed top-0 left-0 right-0 z-50 w-full bg-surface-container-low/95 dark:bg-surface-container-low/90 dark:border-b dark:border-outline-variant/30 shadow-[0_4px_16px_rgba(46,21,0,0.08)] dark:shadow-[0_4px_24px_rgba(0,0,0,0.5)] backdrop-blur-md transition-colors duration-300">
       <div className="flex h-20 w-full items-center justify-between gap-space-md px-space-md lg:px-margin">
         <div className="flex items-center gap-space-lg">
-          <Link to="/" className="flex items-center gap-space-sm">
-            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-secondary-container text-on-secondary-container shadow-[0_2px_4px_rgba(133,83,0,0.2)]">
-              <Icon name="filter_vintage" size={24}/>
-            </div>
+          <Link to="/" className="flex items-center gap-space-sm" aria-label="Solah Parchi Thap Home">
+            <img
+              src="/spt-emblem.png"
+              alt="Solah Parchi Thap Traditional Heritage Emblem (© 2026 Solah Parchi Thap Interactive Games)"
+              title="© 2026 Solah Parchi Thap Interactive Games. All rights reserved."
+              className="h-10 w-10 object-contain drop-shadow-sm"
+            />
             <div className="flex flex-col">
               <span className="font-headline-sm text-headline-sm uppercase leading-tight tracking-tight text-primary">
                 SOLAH PARCHI THAP
@@ -74,7 +78,7 @@ export default function Navbar() {
           <ThemeToggle />
 
           {isAuthenticated ? (<>
-              <Link to="/settings" title="Settings &amp; Baithak Preferences" className="flex h-9 w-9 items-center justify-center rounded-lg bg-surface-container text-on-surface-variant transition-colors hover:bg-surface-container-high hover:text-on-surface">
+              <Link to="/settings" title="Settings &amp; Baithak Preferences" aria-label="Settings &amp; Baithak Preferences" className="flex h-9 w-9 items-center justify-center rounded-lg bg-surface-container text-on-surface-variant transition-colors hover:bg-surface-container-high hover:text-on-surface focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">
                 <Icon name="settings" size={20}/>
               </Link>
               <div className="flex items-center gap-space-sm pl-space-xs">
@@ -90,19 +94,59 @@ export default function Navbar() {
                 <button type="button" onClick={() => {
                 logout();
                 navigate('/');
-            }} className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-on-primary" title="Log out">
+            }} className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-on-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" title="Log out of Solah Parchi Thap" aria-label="Log out of Solah Parchi Thap">
                   <Icon name={currentAvatarIcon} size={18}/>
                 </button>
               </div>
             </>) : (<>
-              <Link to="/login" className="rounded-lg px-space-md py-space-sm font-label-lg text-label-lg text-on-surface-variant hover:text-on-surface">
+              <Link to="/login" className="rounded-lg px-space-md py-space-sm font-label-lg text-label-lg text-on-surface-variant hover:text-on-surface focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">
                 Log in
               </Link>
-              <Link to="/signup" className="rounded-lg bg-primary px-space-md py-space-sm font-label-lg text-label-lg font-bold text-on-primary shadow-sm hover:bg-primary-container">
+              <Link to="/signup" className="rounded-lg bg-primary px-space-md py-space-sm font-label-lg text-label-lg font-bold text-on-primary shadow-sm hover:bg-primary-container focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">
                 Sign up
               </Link>
             </>)}
+
+          {/* Mobile Menu Button */}
+          <button
+            type="button"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            aria-label={mobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
+            aria-expanded={mobileMenuOpen}
+            className="flex h-9 w-9 items-center justify-center rounded-lg border border-outline-variant/60 bg-surface-container text-on-surface xl:hidden hover:bg-surface-container-high transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+          >
+            <Icon name={mobileMenuOpen ? 'close' : 'menu'} size={22} />
+          </button>
         </div>
       </div>
+
+      {/* Mobile Drawer Menu */}
+      {mobileMenuOpen && (
+        <div className="border-b border-outline-variant/60 bg-surface-container-lowest/98 px-space-md py-space-md shadow-xl xl:hidden animate-in fade-in slide-in-from-top-2 duration-200">
+          <nav aria-label="Mobile navigation" className="flex flex-col gap-1">
+            {NAV_LINKS.map((link) => (
+              <Link
+                key={link.path}
+                to={link.to}
+                onClick={() => setMobileMenuOpen(false)}
+                className={`rounded-lg px-space-md py-2.5 font-label-md text-label-md font-bold transition-colors ${
+                  location.pathname === link.to
+                    ? 'bg-primary text-on-primary'
+                    : 'text-on-surface hover:bg-surface-container-high'
+                }`}
+              >
+                {link.label}
+              </Link>
+            ))}
+            <Link
+              to="/cookies"
+              onClick={() => setMobileMenuOpen(false)}
+              className="rounded-lg px-space-md py-2 text-xs font-semibold text-secondary hover:bg-surface-container-high transition-colors mt-2 border-t border-outline-variant/30 pt-3"
+            >
+              Cookies Policy &amp; Storage Preferences
+            </Link>
+          </nav>
+        </div>
+      )}
     </header>);
 }

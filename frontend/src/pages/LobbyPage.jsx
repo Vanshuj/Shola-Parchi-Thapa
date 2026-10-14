@@ -342,7 +342,7 @@ export default function LobbyPage() {
               Your Customized Parchis
             </h3>
             <p className="font-body-sm text-body-sm text-on-surface-variant mb-space-md">
-              Chit titles are 100% private to your screen. Opponents only see numbered folded paper.
+              Chit titles are kept private to your device. Opponents only see numbered folded paper.
             </p>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-space-xs mb-space-md">
               {labels ? (Object.entries(labels).map(([k, val], i) => (<div key={k} className="rounded-lg bg-surface-container-low p-space-xs text-center border border-outline-variant/60">

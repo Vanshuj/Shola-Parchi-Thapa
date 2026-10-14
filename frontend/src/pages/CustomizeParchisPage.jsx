@@ -70,7 +70,7 @@ export default function CustomizeParchisPage() {
           <Icon name="lock" size={22} className="text-on-secondary-container"/>
         </div>
         <p className="font-body-md text-body-md text-on-surface-variant flex-1">
-          <strong className="text-on-surface">100% private to your gaze.</strong> Opponents never see your custom
+          <strong className="text-on-surface">Client-side private to your screen.</strong> Opponents never see your custom
           chit titles! When chits slide across the floor or get swapped, they only see standard numbered folds.
           Only your screen renders your handwritten labels.
         </p>

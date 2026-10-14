@@ -111,8 +111,9 @@ export default function SangeetPlayerButton() {
               min="0"
               max="100"
               value={volume}
+              aria-label="Ambient music volume"
               onChange={(e) => update({ ambientVolume: Number(e.target.value) })}
-              className="w-full accent-secondary cursor-pointer h-1.5 bg-surface-container-highest rounded-lg"
+              className="w-full accent-secondary cursor-pointer h-1.5 bg-surface-container-highest rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary"
             />
             <span className="font-label-sm text-[11px] font-mono text-on-surface-variant w-8 text-right shrink-0">
               {volume}%

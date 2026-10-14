@@ -111,9 +111,9 @@ export default function LandingPage() {
         <div className="relative max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-space-xl lg:gap-space-lg items-center">
           <div className="lg:col-span-6 flex flex-col items-start text-left z-10">
             <div className="inline-flex items-center gap-space-xs px-space-md py-space-xs mb-space-md rounded-full bg-surface-container-highest shadow-sm">
-              <Icon name="verified" size={18} filled className="text-primary"/>
+              <Icon name="history_edu" size={18} className="text-secondary"/>
               <span className="font-label-sm text-label-sm uppercase tracking-wider text-secondary font-bold">
-                1980s Baithak Classic &bull; Realtime 4P
+                Traditional 1980s Baithak Game &bull; Realtime 4P
               </span>
             </div>
             <h1 className="font-display-lg text-display-lg-mobile lg:text-display-lg text-on-surface tracking-tight font-extrabold leading-none mb-space-md">
@@ -130,7 +130,8 @@ export default function LandingPage() {
                 id="play-bots-btn"
                 onClick={handleStartBotMatch}
                 disabled={botLoading}
-                className="group relative px-space-lg py-space-md rounded-lg bg-primary text-on-primary font-label-lg text-label-lg font-bold shadow-md hover:shadow-xl hover:bg-primary-container active:translate-y-0.5 transition-all flex items-center justify-center gap-space-xs disabled:opacity-50"
+                aria-label={botLoading ? "Starting bot match" : "Play instant 4-player game with AI bots"}
+                className="group relative px-space-lg py-space-md rounded-lg bg-primary text-on-primary font-label-lg text-label-lg font-bold shadow-md hover:shadow-xl hover:bg-primary-container active:translate-y-0.5 transition-all flex items-center justify-center gap-space-xs disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
                 title="Start instant 4-player game with AI bots"
               >
                 {botLoading ? (
@@ -163,22 +164,25 @@ export default function LandingPage() {
             )}
 
             <form onSubmit={handlePasscodeSubmit} className="w-full sm:max-w-md p-space-sm rounded-xl bg-surface-container-low shadow-sm flex items-center gap-space-sm">
-              <div className="flex items-center gap-space-xs pl-space-xs text-on-surface-variant font-label-sm text-label-sm uppercase">
+              <label htmlFor="landing-passcode-input" className="flex items-center gap-space-xs pl-space-xs text-on-surface font-label-sm text-label-sm uppercase font-bold cursor-pointer">
                 <Icon name="key" size={18} className="text-secondary"/>
                 <span>Passcode:</span>
-              </div>
+              </label>
               <input
+                id="landing-passcode-input"
                 maxLength={8}
                 value={passcode}
                 onChange={(e) => setPasscode(e.target.value.toUpperCase())}
                 placeholder="THAP-9812"
+                aria-label="Enter 8-character room passcode to join a private baithak"
                 disabled={joiningPasscode}
-                className="flex-1 bg-surface-container-lowest px-space-sm py-1.5 rounded font-label-md text-label-md text-on-surface uppercase tracking-widest outline-none text-center placeholder:text-outline-variant disabled:opacity-50"
+                className="flex-1 bg-surface-container-lowest px-space-sm py-1.5 rounded font-label-md text-label-md text-on-surface uppercase tracking-widest outline-none text-center placeholder:text-on-surface-variant/70 disabled:opacity-50 focus-visible:ring-2 focus-visible:ring-primary"
               />
               <button
                 type="submit"
                 disabled={joiningPasscode || !passcode.trim()}
-                className="px-space-md py-1.5 rounded-lg bg-surface-container-highest hover:bg-secondary-fixed text-on-secondary-container font-label-sm text-label-sm uppercase font-bold transition-colors disabled:opacity-50 flex items-center gap-1"
+                aria-label={joiningPasscode ? "Joining room" : "Enter room with passcode"}
+                className="px-space-md py-1.5 rounded-lg bg-surface-container-highest hover:bg-secondary-fixed text-on-secondary-container font-label-sm text-label-sm uppercase font-bold transition-colors disabled:opacity-50 flex items-center gap-1 focus-visible:ring-2 focus-visible:ring-secondary"
               >
                 {joiningPasscode ? (
                   <>
@@ -219,10 +223,23 @@ export default function LandingPage() {
                 </div>
 
                 <div className="relative flex flex-col items-center justify-center">
-                  <div className="w-32 h-32 lg:w-36 lg:h-36 rounded-full hover:scale-105 active:scale-95 transition-all duration-300 flex flex-col items-center justify-center text-center p-space-sm relative z-20 group cursor-pointer overflow-hidden" style={{
-            background: 'radial-gradient(circle at 35% 28%, #ff6b6b 0%, #ee2727 25%, #b91c1c 50%, #7a0008 80%, #3d0004 100%)',
-            boxShadow: 'inset -8px -12px 24px rgba(0, 0, 0, 0.7), inset 4px 6px 14px rgba(255, 255, 255, 0.5), 0 20px 40px -8px rgba(147, 0, 11, 0.55), 0 10px 25px rgba(0, 0, 0, 0.3)',
-        }}>
+                  <div
+                    role="button"
+                    tabIndex={0}
+                    aria-label="Table slap pad (THAP!) - Press Enter or Space to test slap"
+                    onClick={handleStartBotMatch}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        handleStartBotMatch();
+                      }
+                    }}
+                    className="w-32 h-32 lg:w-36 lg:h-36 rounded-full hover:scale-105 active:scale-95 transition-all duration-300 flex flex-col items-center justify-center text-center p-space-sm relative z-20 group cursor-pointer overflow-hidden focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary"
+                    style={{
+                      background: 'radial-gradient(circle at 35% 28%, #ff6b6b 0%, #ee2727 25%, #b91c1c 50%, #7a0008 80%, #3d0004 100%)',
+                      boxShadow: 'inset -8px -12px 24px rgba(0, 0, 0, 0.7), inset 4px 6px 14px rgba(255, 255, 255, 0.5), 0 20px 40px -8px rgba(147, 0, 11, 0.55), 0 10px 25px rgba(0, 0, 0, 0.3)',
+                    }}
+                  >
                     {/* Spherical glossy highlight */}
                     <div className="absolute top-2.5 left-5 w-12 h-6 rounded-full bg-gradient-to-b from-white/70 via-white/20 to-transparent -rotate-12 pointer-events-none blur-[0.5px]"/>
                     {/* Spherical bottom bounce glow */}
@@ -333,12 +350,12 @@ export default function LandingPage() {
                   Private Deck Masking
                 </span>
               </div>
-              <h3 className="font-headline-sm text-headline-sm text-on-surface mb-space-xs">
-                100% Private Handwritten Labels
+              <h3 className="font-headline-sm text-headline-sm text-on-surface mb-space-xs font-bold">
+                Client-Side Private Handwritten Labels
               </h3>
               <p className="font-body-md text-body-md text-on-surface-variant mb-space-lg">
                 Create chits titled after cousins, childhood gully nicknames, or regional dishes. Opponents only
-                see crisp folded paper chits in flight &mdash; labels reveal themselves only in your hand!
+                see neutral folded paper chits &mdash; your custom labels render strictly on your own device!
               </p>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-space-sm">
                 {[
@@ -384,12 +401,12 @@ export default function LandingPage() {
               <div className="w-11 h-11 rounded-lg bg-tertiary-container flex items-center justify-center mb-space-md">
                 <Icon name="bolt" size={22} className="text-on-tertiary"/>
               </div>
-              <h3 className="font-headline-sm text-headline-sm text-on-surface mb-space-xs">
-                Ultra-Low Latency Slap Engine
+              <h3 className="font-headline-sm text-headline-sm text-on-surface mb-space-xs font-bold">
+                Low-Latency Slap Arbitration
               </h3>
               <p className="font-body-md text-body-md text-on-surface-variant">
-                Because 4 hands hit the table within milliseconds of each other, our bespoke time-sync ensures
-                fair order of contact even between Mumbai, Singapore, and California.
+                When four hands slam the table within fractions of a second, synchronized server timestamps are designed
+                to validate and order contact events fairly within network latency constraints.
               </p>
             </div>
           </div>
@@ -433,13 +450,13 @@ export default function LandingPage() {
             </Link>
           </div>
           <div className="mt-space-lg flex flex-wrap items-center justify-center gap-space-md font-body-sm text-body-sm text-on-surface-variant">
-            <span className="flex items-center gap-1">
-              <Icon name="check_circle" size={16} className="text-secondary"/> 100% Free to Play
+            <span className="flex items-center gap-1 font-medium">
+              <Icon name="check_circle" size={16} className="text-secondary"/> Free to Play (No Gambling)
             </span>
-            <span className="flex items-center gap-1">
+            <span className="flex items-center gap-1 font-medium">
               <Icon name="check_circle" size={16} className="text-secondary"/> Realtime Multiplayer
             </span>
-            <span className="flex items-center gap-1">
+            <span className="flex items-center gap-1 font-medium">
               <Icon name="check_circle" size={16} className="text-secondary"/> Works on Mobile &amp; Tablet
             </span>
           </div>
