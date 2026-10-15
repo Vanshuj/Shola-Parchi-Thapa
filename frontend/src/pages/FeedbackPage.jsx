@@ -370,7 +370,7 @@ export default function FeedbackPage() {
           <span>Statutory Grievance Redressal (Section 8(10) &amp; Section 13, DPDP Act 2023)</span>
         </h3>
         <p className="leading-relaxed">
-          If you have a formal data protection complaint or wish to exercise your rights of Access, Correction, Erasure, or Consent Withdrawal, you may address our designated Grievance Officer, <strong>Priya Sharma</strong>, directly at{' '}
+          If you have a formal data protection complaint or wish to exercise your rights of Access, Correction, Erasure, or Consent Withdrawal, you may address our designated Grievance Officer, <strong>Vanshika Jain</strong>, directly at{' '}
           <a href="mailto:grievance@solahparchithap.in" className="text-primary font-bold underline">
             grievance@solahparchithap.in
           </a>. Under the DPDP Act 2023, grievances are acknowledged within 48 hours and resolved within 30 days. If unsatisfied with the resolution, you retain the legal right to escalate the matter to the <strong>Data Protection Board of India (DPBI)</strong>.

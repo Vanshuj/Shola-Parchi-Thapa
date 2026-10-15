@@ -216,7 +216,7 @@ export default function PrivacyPolicyPage() {
             <span className="font-label-sm uppercase text-secondary font-bold block mb-1">
               Designated Grievance Redressal Officer
             </span>
-            <p className="font-bold text-on-surface">Priya Sharma</p>
+            <p className="font-bold text-on-surface">Vanshika Jain</p>
             <p className="text-on-surface-variant">Designation: Data Protection &amp; Grievance Redressal Officer</p>
             <p className="text-on-surface-variant">Email: <a href="mailto:grievance@solahparchithap.in" className="text-primary hover:underline">grievance@solahparchithap.in</a></p>
             <p className="text-[11px] text-secondary font-semibold mt-1">Statutory Response: Acknowledgment &lt; 48 hours; Resolution &lt; 30 days</p>

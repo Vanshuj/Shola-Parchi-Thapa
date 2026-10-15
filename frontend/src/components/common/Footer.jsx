@@ -76,7 +76,7 @@ export default function Footer() {
             <span className="font-label-sm uppercase tracking-wider text-secondary font-bold block mb-1">
               Grievance Redressal (DPDP Act 2023)
             </span>
-            <p className="font-semibold text-on-surface">Priya Sharma, Data Protection Officer</p>
+            <p className="font-semibold text-on-surface">Vanshika Jain, Data Protection Officer</p>
             <p className="mt-0.5 text-on-surface-variant">Appointed under Section 8(10) of the DPDP Act, 2023</p>
             <p className="mt-1">Email: <a href="mailto:grievance@solahparchithap.in" className="text-primary hover:underline">grievance@solahparchithap.in</a></p>
             <p className="text-[11px] text-secondary font-medium mt-0.5">Turnaround: Acknowledgement &lt; 48h, Resolution &lt; 30d</p>

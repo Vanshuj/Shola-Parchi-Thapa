@@ -266,7 +266,7 @@ export default function CookiePolicyPage() {
             <span className="font-label-sm text-label-sm uppercase text-secondary font-bold block mb-1">
               Grievance Redressal Officer (DPDP Act)
             </span>
-            <p className="font-bold text-on-surface">Priya Sharma</p>
+            <p className="font-bold text-on-surface">Vanshika Jain</p>
             <p className="text-on-surface-variant">Designation: Data Protection &amp; Grievance Officer</p>
             <p className="text-on-surface-variant">Email: <a href="mailto:grievance@solahparchithap.in" className="text-primary hover:underline">grievance@solahparchithap.in</a></p>
             <p className="text-[11px] text-secondary font-semibold mt-1">Statutory Response Window: Within 30 Days</p>

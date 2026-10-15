@@ -57,14 +57,31 @@ solah-parchi-thap/
 
 ## 💻 Running Locally
 
-### Prerequisites
-- **Java**: JDK 17 or higher (`java -version`)
-- **Node.js**: v18+ and npm (`node -v`, `npm -v`)
-- **MongoDB**: Local MongoDB on port `27017` or a MongoDB Atlas cloud URI
+### ⚡ Quick Start: One Command (Full Stack)
+
+Run both the Spring Boot backend and React frontend concurrently with automatic `.env` loading:
+
+```powershell
+npm start
+```
+*(or `npm run dev`, `node run.js`, `.\run.bat`, or `.\run.ps1`)*
+
+- **Frontend**: **http://localhost:8000**
+- **Backend API**: **http://localhost:8080**
+- Press `Ctrl + C` at any time to gracefully stop both servers.
 
 ---
 
-### Step 1: Start Backend (Terminal 1)
+### Prerequisites
+- **Java**: JDK 17 or higher (`java -version`)
+- **Node.js**: v18+ and npm (`node -v`, `npm -v`)
+- **MongoDB**: MongoDB Atlas (configured in `.env`) or local MongoDB on port `27017`
+
+---
+
+### Manual Multi-Terminal Mode (Optional)
+
+#### Step 1: Start Backend (Terminal 1)
 
 ```powershell
 cd backend

@@ -1,0 +1,12 @@
+{
+  "name": "solah-parchi-thap-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Solah Parchi Thap - Traditional Indian 16-chit multiplayer game",
+  "scripts": {
+    "start": "node run.js",
+    "dev": "node run.js",
+    "test:frontend": "npm --prefix frontend test",
+    "test:backend": "cd backend && mvnw.cmd test"
+  }
+}
